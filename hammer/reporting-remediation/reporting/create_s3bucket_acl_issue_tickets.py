@@ -122,11 +122,13 @@ class CreateS3BucketsTickets:
                     issue_description += f"\n"
                     issue_description += (
                         f"*Recommendation*: "
-                        f"Update bucket permissions to restrict access to the owner or specific users."
-                        f"Or Grant CloudFront OAI applicable permissions on each object that CloudFront distribution serves."
-                        f"If global access is truly needed, provide strong business justification and follow "
-                        f"[whitelisting procedure|https://wiki.dowjones.net/pages/viewpage.action?spaceKey=InfoSec&title=Hammer+Whitelisting]. "
+                        f"Update bucket permissions to restrict access to the owner or specific users "
+                        f"or grant CloudFront OAI applicable permissions on each object that CloudFront distribution serves. "
                     )
+
+                    if self.config.whitelisting_procedure_url is not None:
+                        issue_description += (f"For any other exceptions, please follow the [whitelisting procedure|{self.config.whitelisting_procedure_url}] "
+                                              f"and provide a strong business reasoning. ")
 
                     try:
                         response = jira.add_issue(
