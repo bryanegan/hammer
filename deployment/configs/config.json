@@ -43,6 +43,7 @@
     "credentials": {
         "ddb.table_name": "hammer-credentials"
     },
+    "whitelisting_procedure_url": "",
     "s3_bucket_acl": {
         "enabled": true,
         "ddb.table_name": "hammer-s3-public-bucket-acl",
@@ -119,5 +120,11 @@
         "remediation": false,
         "remediation_retention_period": 0
     },
-    "whitelisting_procedure_url": "https://wiki.dowjones.net/pages/viewpage.action?spaceKey=InfoSec&title=Hammer+Whitelisting"
+    "s3_encryption": {
+        "enabled": true,
+        "ddb.table_name": "hammer-s3-unencrypted",
+        "reporting": true,
+        "remediation": false,
+        "remediation_retention_period": 21
+    }
 }
