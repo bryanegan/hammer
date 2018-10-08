@@ -20,6 +20,7 @@ RDSInstance = namedtuple('RDSInstance', [
     'public'
     ])
 
+
 class RdsSnapshotOperations(object):
     @staticmethod
     def make_private(rds_client, engine, snapshot_id):
@@ -102,6 +103,8 @@ class RdsSnapshot(object):
         self.attributes = []
         # name of the database engine
         self.engine = source.get('Engine', None)
+        # tags placeholder
+        self._tags = {}
 
     def __str__(self):
         return f"{self.__class__.__name__}(Id={self.id}, db={self.db}, " \
@@ -122,9 +125,9 @@ class RdsSnapshot(object):
         self._tags = convert_tags(value)
 
 
-class RdsInstance(object):
+class RdsDB(object):
     """
-    Parent class for RDS Instance (DB or Cluster). Child classes must define methods and fields to work with DB or Cluster instances.
+    Parent class for RDS database (Instance or Cluster). Child classes must define methods and fields to work with Instance or Cluster instances.
     Encapsulates `DB[Cluster]InstanceIdentifier`/`DB[Cluster]InstanceArn`/`DB[Cluster]InstanceIdentifier/Engine` and attributes.
     """
     ### all these static fields must be defined by child classes
@@ -154,10 +157,11 @@ class RdsInstance(object):
         self.attributes = []
         # name of the database engine
         self.engine = source.get('Engine', None)
+        # tags placeholder
+        self._tags = {}
 
     def __str__(self):
-        return f"{self.__class__.__name__}(Id={self.id}, db={self.db}, " \
-               f"engine={self.engine})"
+        return f"{self.__class__.__name__}(Id={self.id}, engine={self.engine})"
 
     @property
     def tags(self):
@@ -192,7 +196,7 @@ class RdsClusterSnapshot(RdsSnapshot):
     modify_attribute_method = "modify_db_cluster_snapshot_attribute"
 
 
-class RdsInstance(RdsInstance):
+class RdsInstance(RdsDB):
     describe_method = "describe_db_instances"
     response_field = "DBInstances"
     instance_id_field = "DBInstanceIdentifier"
@@ -200,7 +204,7 @@ class RdsInstance(RdsInstance):
     storage_encryption_field = "StorageEncrypted"
 
 
-class RdsCluster(RdsInstance):
+class RdsCluster(RdsDB):
     describe_method = "describe_db_clusters"
     response_field = "DBClusters"
     instance_id_field = "DBClusterIdentifier"
