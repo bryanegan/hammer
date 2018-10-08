@@ -212,6 +212,9 @@ class S3EncryptionIssue(Issue):
     def __init__(self, *args):
         super().__init__(*args)
 
+class RdsEncryptionIssue(Issue):
+    def __init__(self, *args):
+        super().__init__(*args)
 
 class Operations(object):
     @staticmethod
